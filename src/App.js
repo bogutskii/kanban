@@ -1,25 +1,45 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
+
+  const columns = [
+    {
+      name: 'todo',
+      color: 'primary'
+    },
+    {
+      name: 'progress',
+      color: 'secondary'
+    },
+    {
+      name: 'review',
+      color: 'warning'
+    },
+    {
+      name: 'done',
+      color: 'success'
+    }
+  ]
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Kanban</h1>
+      <div className="row">
+        {columns.map(col =>
+          <div className='col-sm d-flex'>
+            <div className={`w-100 border-top border-${col.color}`}>
+              <h3>{col.name}</h3>
+
+            </div>
+          </div>
+        )
+        }
+
+      </div>
     </div>
+
   );
 }
 
