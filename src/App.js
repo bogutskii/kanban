@@ -109,6 +109,55 @@ function App() {
     setColumns(reranged)
   }
 
+
+  const left = (arg) => {
+    const reranged = columns.map((col, index) => {
+        if (col.nameBoard === arg.columnName) {
+          if (index > 0) {
+            for (let i = 0; i < col.tasks.length; i++) {
+              if (col.tasks[i].id === arg.taskId) {
+               // console.log(columns,col, index , col.tasks,'llllll', col.tasks.splice(i,1))
+
+             columns[index - 1].tasks.push(...col.tasks.splice(i,1))
+
+                return {...col}
+
+
+              }
+            }
+          }
+          return {...col }
+        } else
+          return col
+      }
+    )
+    setColumns(reranged)
+  }
+
+  const right = (arg) => {
+    const reranged = columns.map((col, index) => {
+        if (col.nameBoard === arg.columnName) {
+          if (index < columns.length-1) {
+            for (let i = 0; i < col.tasks.length; i++) {
+              if (col.tasks[i].id === arg.taskId) {
+                // console.log(columns,col, index , col.tasks,'llllll', col.tasks.splice(i,1))
+
+                columns[index + 1].tasks.push(...col.tasks.splice(i,1))
+
+                return {...col}
+
+
+              }
+            }
+          }
+          return {...col }
+        } else
+          return col
+      }
+    )
+    setColumns(reranged)
+  }
+
   return (
     <div className="container">
       <h1 className="mb-4 mt-4">Kanban</h1>
@@ -138,6 +187,21 @@ function App() {
                                 }
                               )}> ↓
                       </button>
+                      <button type="button" className="btn btn-light"
+                              onClick={() => left({
+                                  columnName: col.nameBoard,
+                                  taskId: task.id
+                                }
+                              )}> ←
+                      </button>
+                      <button type="button" className="btn btn-light"
+                              onClick={() => right({
+                                  columnName: col.nameBoard,
+                                  taskId: task.id
+                                }
+                              )}> →
+                      </button>
+
                     </div>
                   </div>
                 )}
