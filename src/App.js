@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 const columnsInitial = [
   {
-    name: 'todo',
+    nameBoard: 'todo',
     color: 'primary',
     tasks: [
       {
@@ -13,7 +13,7 @@ const columnsInitial = [
       }]
   },
   {
-    name: 'progress',
+    nameBoard: 'progress',
     color: 'secondary',
     tasks: [
       {
@@ -27,7 +27,7 @@ const columnsInitial = [
   },
 
   {
-    name: 'review',
+    nameBoard: 'review',
     color: 'warning',
     tasks: [
       {
@@ -41,7 +41,7 @@ const columnsInitial = [
   },
 
   {
-    name: 'done',
+    nameBoard: 'done',
     color: 'success',
     tasks: [
       {
@@ -51,27 +51,63 @@ const columnsInitial = [
       {
         id: 7,
         name: 'todo 7'
+      },
+      {
+        id: 8,
+        name: 'todo 8'
+      },
+      {
+        id: 9,
+        name: 'todo 9'
       }]
   }
 ]
 
+
 function App() {
-const [columns, setColumns] = useState(columnsInitial)
+  const [columns, setColumns] = useState(columnsInitial)
 
-  const up =(arg) => {
-  console.log(arg)
-    const reranged = columns.map(col => {
-      if (col.name === arg.columnName){
-        const tasks = col.tasks
-
-        return {...col, tasks}
-
-      }else return col
-
-    })
+  const up = (arg) => {
+    const reranged = columns.map((col) => {
+        if (col.nameBoard === arg.columnName) {
+          const tasks = col.tasks;
+          for (let i = 0; i < tasks.length; i++) {
+            if (tasks[i].id === arg.taskId) {
+              if (i > 0) {
+                [tasks[i], tasks[i - 1]] = [tasks[i - 1], tasks[i]]
+                return {...col, tasks}
+              }
+              ;
+            }
+          }
+          return {...col, tasks}
+        } else
+          return col
+      }
+    )
     setColumns(reranged)
   }
 
+  const down = (arg) => {
+    const reranged = columns.map((col) => {
+        if (col.nameBoard === arg.columnName) {
+          const tasks = col.tasks;
+          for (let i = 0; i < tasks.length; i++) {
+            if (tasks[i].id === arg.taskId) {
+              if (i < tasks.length - 1) {
+                [tasks[i], tasks[i + 1]] = [tasks[i + 1], tasks[i]]
+                return {...col, tasks}
+              }
+              ;
+            }
+          }
+          return {...col, tasks}
+        } else
+          return col
+      }
+    )
+    setColumns(reranged)
+  }
 
   return (
     <div className="container">
@@ -80,7 +116,7 @@ const [columns, setColumns] = useState(columnsInitial)
         {columns.map(col =>
           <div className='col-sm d-flex'>
             <div className={`w-100 border-top border-${col.color} border-width-4`}>
-              <h3>{col.name}</h3>
+              <h3>{col.nameBoard}</h3>
               {
                 col.tasks.map(task =>
                   <div className="card mb-2">
@@ -89,14 +125,19 @@ const [columns, setColumns] = useState(columnsInitial)
                         {task.name}
                       </h5>
                       <button type="button" className="btn btn-light"
-                      onClick={() => up({
-                        columnName: col.name,
-                        taskId: task.id
-                        }
-
-                      )} >up
+                              onClick={() => up({
+                                  columnName: col.nameBoard,
+                                  taskId: task.id
+                                }
+                              )}>up
                       </button>
-                      <button>down</button>
+                      <button type="button" className="btn btn-light"
+                              onClick={() => down({
+                                  columnName: col.nameBoard,
+                                  taskId: task.id
+                                }
+                              )}>down
+                      </button>
                     </div>
                   </div>
                 )}
