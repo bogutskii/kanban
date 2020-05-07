@@ -114,12 +114,12 @@ function App() {
       <h1 className="mb-4 mt-4">Kanban</h1>
       <div className="row">
         {columns.map(col =>
-          <div className='col-sm d-flex'>
+          <div className='col-sm d-flex' key={col.nameBoard}>
             <div className={`w-100 border-top border-${col.color} border-width-4`}>
               <h3>{col.nameBoard}</h3>
               {
                 col.tasks.map(task =>
-                  <div className="card mb-2">
+                  <div className="card mb-2" key={task.id * Math.random()}>
                     <div className="card-body">
                       <h5 className="card-title">
                         {task.name}
@@ -129,14 +129,14 @@ function App() {
                                   columnName: col.nameBoard,
                                   taskId: task.id
                                 }
-                              )}>up
+                              )}> ↑
                       </button>
                       <button type="button" className="btn btn-light"
                               onClick={() => down({
                                   columnName: col.nameBoard,
                                   taskId: task.id
                                 }
-                              )}>down
+                              )}> ↓
                       </button>
                     </div>
                   </div>
