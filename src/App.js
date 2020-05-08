@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { v4 as uuidv4 } from 'uuid';
+
 
 const columnsInitial = [
   {
@@ -8,7 +10,7 @@ const columnsInitial = [
     color: 'primary',
     tasks: [
       {
-        id: 1,
+        id: uuidv4(),
         name: 'todo1'
       }]
   },
@@ -17,11 +19,11 @@ const columnsInitial = [
     color: 'secondary',
     tasks: [
       {
-        id: 2,
+        id: uuidv4(),
         name: 'todo2'
       },
       {
-        id: 3,
+        id: uuidv4(),
         name: 'todo3'
       }]
   },
@@ -31,11 +33,11 @@ const columnsInitial = [
     color: 'warning',
     tasks: [
       {
-        id: 4,
+        id: uuidv4(),
         name: 'todo 4'
       },
       {
-        id: 5,
+        id: uuidv4(),
         name: 'todo 5'
       }]
   },
@@ -45,19 +47,19 @@ const columnsInitial = [
     color: 'success',
     tasks: [
       {
-        id: 6,
+        id: uuidv4(),
         name: 'todo 6'
       },
       {
-        id: 7,
+        id: uuidv4(),
         name: 'todo 7'
       },
       {
-        id: 8,
+        id: uuidv4(),
         name: 'todo 8'
       },
       {
-        id: 9,
+        id: uuidv4(),
         name: 'todo 9'
       }]
   }
@@ -116,9 +118,7 @@ function App() {
           if (index > 0) {
             for (let i = 0; i < col.tasks.length; i++) {
               if (col.tasks[i].id === arg.taskId) {
-               // console.log(columns,col, index , col.tasks,'llllll', col.tasks.splice(i,1))
-
-             columns[index - 1].tasks.push(...col.tasks.splice(i,1))
+                columns[index - 1].tasks.push(...col.tasks.splice(i, 1))
 
                 return {...col}
 
@@ -126,7 +126,7 @@ function App() {
               }
             }
           }
-          return {...col }
+          return {...col}
         } else
           return col
       }
@@ -137,12 +137,12 @@ function App() {
   const right = (arg) => {
     const reranged = columns.map((col, index) => {
         if (col.nameBoard === arg.columnName) {
-          if (index < columns.length-1) {
+          if (index < columns.length - 1) {
             for (let i = 0; i < col.tasks.length; i++) {
               if (col.tasks[i].id === arg.taskId) {
-                // console.log(columns,col, index , col.tasks,'llllll', col.tasks.splice(i,1))
+                 console.log(arg.taskId)
 
-                columns[index + 1].tasks.push(...col.tasks.splice(i,1))
+                columns[index + 1].tasks.push(...col.tasks.splice(i, 1))
 
                 return {...col}
 
@@ -150,7 +150,7 @@ function App() {
               }
             }
           }
-          return {...col }
+          return {...col}
         } else
           return col
       }
@@ -161,6 +161,7 @@ function App() {
   return (
     <div className="container">
       <h1 className="mb-4 mt-4">Kanban</h1>
+      <button>Create task</button>
       <div className="row">
         {columns.map(col =>
           <div className='col-sm d-flex' key={col.nameBoard}>
@@ -168,7 +169,7 @@ function App() {
               <h3>{col.nameBoard}</h3>
               {
                 col.tasks.map(task =>
-                  <div className="card mb-2" key={task.id * Math.random()}>
+                  <div className="card mb-2" key={task.id}>
                     <div className="card-body">
                       <h5 className="card-title">
                         {task.name}
