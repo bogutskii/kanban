@@ -82,15 +82,11 @@ function App() {
     const reranged = columns.map((col) => {
         if (col.nameBoard === arg.columnName) {
           const tasks = col.tasks;
-          for (let i = 0; i < tasks.length; i++) {
-            if (tasks[i].id === arg.taskId) {
-              if (i > 0) {
-                [tasks[i], tasks[i - 1]] = [tasks[i - 1], tasks[i]]
-                return {...col, tasks}
-              }
-            }
+          let ind = col.tasks.findIndex(el => el.id === arg.taskId)
+          if (ind > 0) {
+            [tasks[ind], tasks[ind - 1]] = [tasks[ind - 1], tasks[ind]]
+            return {...col, tasks}
           }
-          return {...col, tasks}
         }
         return col
       }
@@ -102,15 +98,11 @@ function App() {
     const reranged = columns.map((col) => {
         if (col.nameBoard === arg.columnName) {
           const tasks = col.tasks;
-          for (let i = 0; i < tasks.length; i++) {
-            if (tasks[i].id === arg.taskId) {
-              if (i < tasks.length - 1) {
-                [tasks[i], tasks[i + 1]] = [tasks[i + 1], tasks[i]]
-                return {...col, tasks}
-              }
-            }
+          let ind = col.tasks.findIndex(el => el.id === arg.taskId)
+          if (ind < tasks.length - 1) {
+            [tasks[ind], tasks[ind + 1]] = [tasks[ind + 1], tasks[ind]]
+            return {...col, tasks}
           }
-          return {...col, tasks}
         }
         return col
       }
@@ -118,19 +110,14 @@ function App() {
     setColumns(reranged)
   }
 
-
   const left = (arg) => {
     const reranged = columns.map((col, index) => {
         if (col.nameBoard === arg.columnName) {
           if (index > 0) {
-            for (let i = 0; i < col.tasks.length; i++) {
-              if (col.tasks[i].id === arg.taskId) {
-                columns[index - 1].tasks.push(...col.tasks.splice(i, 1))
-                return {...col}
-              }
-            }
+            let ind = col.tasks.findIndex(el => el.id === arg.taskId)
+            columns[index - 1].tasks.push(...col.tasks.splice(ind, 1))
+            return {...col}
           }
-          return {...col}
         }
         return col
       }
@@ -142,36 +129,33 @@ function App() {
     const reranged = columns.map((col, index) => {
         if (col.nameBoard === arg.columnName) {
           if (index < columns.length - 1) {
-            for (let i = 0; i < col.tasks.length; i++) {
-              if (col.tasks[i].id === arg.taskId) {
-                columns[index + 1].tasks.push(...col.tasks.splice(i, 1))
-                return {...col}
-              }
-            }
+            let ind = col.tasks.findIndex(el => el.id === arg.taskId)
+            columns[index + 1].tasks.push(...col.tasks.splice(ind, 1))
+            return {...col}
           }
-          return {...col}
         }
         return col
       }
     )
     setColumns(reranged)
   }
+
   const deleteTask = (arg) => {
-    const reranged = columns.map((col, index) => {
-        if (col.nameBoard === arg.columnName) {
 
-          for (let i = 0; i < col.tasks.length; i++) {
-            if (col.tasks[i].id === arg.taskId) {
-              return {...col, ...col.tasks.splice(i, 1)}
-            }
+   if( window.confirm ("Are you sure?")) {
+     const reranged = columns.map((col, index) => {
+         if (col.nameBoard === arg.columnName) {
+           let ind = col.tasks.findIndex(el => el.id === arg.taskId)
+           return {
+             ...col, ...col.tasks.splice(ind, 1)
+           }
+         }
+         return col
+       }
+     )
 
-          }
-          return {...col}
-        }
-        return col
-      }
-    )
-    setColumns(reranged)
+     setColumns(reranged)
+   }
   }
 
   return (
@@ -190,15 +174,15 @@ function App() {
                       <h5 className="card-title">
                         {task.name}
 
-                        <button type="button" className="btn btn-light float-right"
+                        <button type="button" className="btn btn-light float-right" data-toggle="modal" href="#modal"
                                 onClick={() => deleteTask({
                                     columnName: col.nameBoard,
                                     taskId: task.id
                                   }
-                                )}> ×
+                                )}>×
                         </button>
-
                       </h5>
+
                       <p>{task.taskText}</p>
                       <button type="button" className="btn btn-light"
                               onClick={() => up({
@@ -228,13 +212,9 @@ function App() {
                                 }
                               )}> →
                       </button>
-
-
-
                     </div>
                   </div>
                 )}
-
             </div>
           </div>
         )}
