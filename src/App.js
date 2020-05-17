@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { v4 as uuidv4 } from 'uuid';
+import Modal from "react-modal"
 
 
 const columnsInitial = [
@@ -74,9 +75,11 @@ const columnsInitial = [
   }
 ]
 
+Modal.setAppElement('#root')
 
 function App() {
   const [columns, setColumns] = useState(columnsInitial)
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const up = (arg) => {
     const reranged = columns.map((col) => {
@@ -142,26 +145,75 @@ function App() {
 
   const deleteTask = (arg) => {
 
-   if( window.confirm ("Are you sure?")) {
-     const reranged = columns.map((col, index) => {
-         if (col.nameBoard === arg.columnName) {
-           let ind = col.tasks.findIndex(el => el.id === arg.taskId)
-           return {
-             ...col, ...col.tasks.splice(ind, 1)
-           }
-         }
-         return col
-       }
-     )
-
-     setColumns(reranged)
-   }
+    if (window.confirm("Are you sure?")) {
+      const reranged = columns.map((col, index) => {
+          if (col.nameBoard === arg.columnName) {
+            let ind = col.tasks.findIndex(el => el.id === arg.taskId)
+            return {
+              ...col, ...col.tasks.splice(ind, 1)
+            }
+          }
+          return col
+        }
+      )
+      setColumns(reranged)
+    }
   }
 
   return (
     <div className="container">
       <h1 className="mb-4 mt-4">Kanban</h1>
-      <button>Create task</button>
+
+
+      <button className="btn btn-light" onClick={() => setModalIsOpen(true)}>Create task</button>
+
+      <Modal className="modal-dialog" isOpen={modalIsOpen}
+             onRequestClose={() => setModalIsOpen(false)}>
+
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Create new task</h5>
+          </div>
+
+          <div className="modal-body">
+
+
+            <div className="input-group mb-3">
+              <div className="input-group-prepend">
+                <label className="input-group-text" htmlFor="inputGroupSelect01">Options</label>
+              </div>
+              <select className="custom-select" id="inputGroupSelect01">
+
+                {columns.map((board,i) => <option value={i}>{board.nameBoard}</option>)}
+
+              </select>
+            </div>
+
+            <div className="input-group mb-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text" id="basic-addon1">Title</span>
+              </div>
+              <input className="form-control" aria-label="With textarea"></input>
+            </div>
+
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">Text tasks</span>
+              </div>
+              <textarea className="form-control" aria-label="With textarea"></textarea>
+            </div>
+
+          </div>
+
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" onClick={() => setModalIsOpen(false)}>Cancel</button>
+            <button type="button" className="btn btn-primary">Save</button>
+          </div>
+        </div>
+
+      </Modal>
+
+
       <div className="row">
         {columns.map(col =>
           <div className='col-sm d-flex' key={col.nameBoard}>
@@ -218,7 +270,9 @@ function App() {
             </div>
           </div>
         )}
+
       </div>
+
     </div>
   );
 }
