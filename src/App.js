@@ -164,8 +164,7 @@ function App() {
     <div className="container">
       <h1 className="mb-4 mt-4">Kanban</h1>
 
-
-      <button className="btn btn-light" onClick={() => setModalIsOpen(true)}>Create task</button>
+      <button className="btn btn-light mb-10" onClick={() => setModalIsOpen(true)}>Create task</button>
 
       <Modal className="modal-dialog" isOpen={modalIsOpen}
              onRequestClose={() => setModalIsOpen(false)}>
@@ -180,23 +179,21 @@ function App() {
 
             <div className="input-group mb-3">
               <div className="input-group-prepend">
-                <label className="input-group-text" htmlFor="inputGroupSelect01">Options</label>
+                <label className="input-group-text" >Board</label>
               </div>
-              <select className="custom-select" id="inputGroupSelect01">
-
+              <select className="custom-select">
                 {columns.map((board,i) => <option value={i}>{board.nameBoard}</option>)}
-
               </select>
             </div>
 
             <div className="input-group mb-3">
               <div className="input-group-prepend">
-                <span className="input-group-text" id="basic-addon1">Title</span>
+                <span className="input-group-text">Title</span>
               </div>
-              <input className="form-control" aria-label="With textarea"></input>
+              <input className="form-control" required></input>
             </div>
 
-            <div className="input-group">
+            <div className="input-group mb-3">
               <div className="input-group-prepend">
                 <span className="input-group-text">Text tasks</span>
               </div>
