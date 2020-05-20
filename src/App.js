@@ -81,6 +81,24 @@ function App() {
   const [columns, setColumns] = useState(columnsInitial)
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
+  const [modalCreateTask, setModalCreateTask] = useState(
+    {
+          id: uuidv4(),
+          name: '',
+          taskText: ''
+    }
+  )
+
+  const changeInModal = (e) => {
+    setModalCreateTask({...modalCreateTask, [e.target.name] : e.target.value})
+//const boardName = e.target.name
+    //setColumns(columns.map(board => ))
+    console.log(e.target.value);
+    console.log(e.target.name, modalCreateTask);
+
+  }
+
+
   const up = (arg) => {
     const reranged = columns.map((col) => {
         if (col.nameBoard === arg.columnName) {
@@ -146,7 +164,7 @@ function App() {
   const deleteTask = (arg) => {
 
     if (window.confirm("Are you sure?")) {
-      const reranged = columns.map((col, index) => {
+      const reranged = columns.map(col => {
           if (col.nameBoard === arg.columnName) {
             let ind = col.tasks.findIndex(el => el.id === arg.taskId)
             return {
@@ -176,13 +194,14 @@ function App() {
 
           <div className="modal-body">
 
-
+            <form action=""></form>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
-                <label className="input-group-text" >Board</label>
+                <label className="input-group-text">Board</label>
               </div>
-              <select className="custom-select">
-                {columns.map((board,i) => <option value={i}>{board.nameBoard}</option>)}
+              <select name="nameBoard" onChange={changeInModal}>
+                {columns.map(board => <option  value={board.nameBoard}
+                                              key={uuidv4()}>{board.nameBoard}</option>)}
               </select>
             </div>
 
@@ -190,14 +209,14 @@ function App() {
               <div className="input-group-prepend">
                 <span className="input-group-text">Title</span>
               </div>
-              <input className="form-control" required></input>
+              <input className="form-control" name="name" onChange={changeInModal} required/>
             </div>
 
             <div className="input-group mb-3">
               <div className="input-group-prepend">
                 <span className="input-group-text">Text tasks</span>
               </div>
-              <textarea className="form-control" aria-label="With textarea"></textarea>
+              <textarea className="form-control" name="taskText" onChange={changeInModal}></textarea>
             </div>
 
           </div>
@@ -223,7 +242,7 @@ function App() {
                       <h5 className="card-title">
                         {task.name}
 
-                        <button type="button" className="btn btn-light float-right" data-toggle="modal" href="#modal"
+                        <button type="button" className="btn btn-light float-right text-danger" data-toggle="modal"
                                 onClick={() => deleteTask({
                                     columnName: col.nameBoard,
                                     taskId: task.id
