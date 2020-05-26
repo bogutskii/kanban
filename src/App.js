@@ -80,24 +80,31 @@ Modal.setAppElement('#root')
 function App() {
   const [columns, setColumns] = useState(columnsInitial)
   const [modalIsOpen, setModalIsOpen] = useState(false)
-
   const [modalCreateTask, setModalCreateTask] = useState(
     {
+      nameBoard: 'todo',
+      task: {
           id: uuidv4(),
           name: '',
           taskText: ''
+        }
     }
   )
 
-  const changeInModal = (e) => {
-    setModalCreateTask({...modalCreateTask, [e.target.name] : e.target.value})
-//const boardName = e.target.name
-    //setColumns(columns.map(board => ))
+ const changeBoard = (e) => {
     console.log(e.target.value);
-    console.log(e.target.name, modalCreateTask);
+    setModalCreateTask({ ...modalCreateTask, nameBoard:  e.target.value})
+ }
+  console.log(modalCreateTask)
 
+ const changeInModalTitle = (e) => {
+  setModalCreateTask({...modalCreateTask, task: {...modalCreateTask.task, name: e.target.value}})
+  console.log(modalCreateTask);
   }
-
+  const changeInModalText = (e) => {
+    setModalCreateTask({...modalCreateTask, task: {...modalCreateTask.task, taskText: e.target.value}})
+    console.log(modalCreateTask);
+  }
 
   const up = (arg) => {
     const reranged = columns.map((col) => {
@@ -178,6 +185,19 @@ function App() {
     }
   }
 
+  const saveModalTask =()=>{
+
+
+    const updatedColummns = columns.map(el => {
+      if(el.nameBoard === modalCreateTask.nameBoard){
+       return { ...el, tasks: [...el.tasks, modalCreateTask.task]}
+      } else return el;
+    })
+
+    setColumns(updatedColummns)
+    setModalIsOpen(false)
+  }
+
   return (
     <div className="container">
       <h1 className="mb-4 mt-4">Kanban</h1>
@@ -194,36 +214,37 @@ function App() {
 
           <div className="modal-body">
 
-            <form action=""></form>
-            <div className="input-group mb-3">
-              <div className="input-group-prepend">
-                <label className="input-group-text">Board</label>
-              </div>
-              <select name="nameBoard" onChange={changeInModal}>
-                {columns.map(board => <option  value={board.nameBoard}
-                                              key={uuidv4()}>{board.nameBoard}</option>)}
-              </select>
-            </div>
+            <form action="">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text">Board</label>
+                </div>
 
-            <div className="input-group mb-3">
-              <div className="input-group-prepend">
-                <span className="input-group-text">Title</span>
-              </div>
-              <input className="form-control" name="name" onChange={changeInModal} required/>
-            </div>
+                <select className="custom-select" onChange={changeBoard} value={modalCreateTask.nameBoard} >
+                  {columns.map((board) => <option key={uuidv4()}>{board.nameBoard}</option>)}
+                </select>
 
-            <div className="input-group mb-3">
-              <div className="input-group-prepend">
-                <span className="input-group-text">Text tasks</span>
               </div>
-              <textarea className="form-control" name="taskText" onChange={changeInModal}></textarea>
-            </div>
 
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text">Title</span>
+                </div>
+                <input className="form-control" name="name" onChange={changeInModalTitle} required/>
+              </div>
+
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text">Text tasks</span>
+                </div>
+                <textarea className="form-control" name="taskText" onChange={changeInModalText}></textarea>
+              </div>
+            </form>
           </div>
 
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" onClick={() => setModalIsOpen(false)}>Cancel</button>
-            <button type="button" className="btn btn-primary">Save</button>
+            <button type="button" className="btn btn-primary" onClick={saveModalTask}>Save</button>
           </div>
         </div>
 
