@@ -244,12 +244,14 @@ function App() {
 
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" onClick={() => setModalIsOpen(false)}>Cancel</button>
-            <button type="button" className="btn btn-primary" onClick={saveModalTask}>Save</button>
+            <button type="button" className="btn btn-primary " onClick={saveModalTask}>Save</button>
           </div>
         </div>
 
       </Modal>
 
+
+      <Modal/>
 
       <div className="row">
         {columns.map(col =>
